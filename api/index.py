@@ -3,12 +3,14 @@ from os import getenv
 from flask import Flask, redirect, request, session, render_template
 from requests import get
 from dotenv import load_dotenv
+import urllib.parse
 
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = getenv("secretkey")
-
+name = "ScratchWarp Servers"
+encoded_name = urllib.parse.quote(name)
 """
 Thanks to Chiroyce (https://replit.com/@Chiroyce/auth) for part of the code! Truly the GOAT.
 """
@@ -23,7 +25,7 @@ def home():
 @app.get("/auth")
 def auth():
     if "username" not in session:
-        return redirect(f"https://auth.itinerary.eu.org/auth/?redirect={ base64('https://scratch-auth-demo.vercel.app/authenticate') }&name=NotFenixio%27s%20ScratchAuth%20Example")
+        return redirect(f"https://auth.itinerary.eu.org/auth/?redirect={ base64('https://scratch-auth-demo.vercel.app/authenticate') }&name={encoded_name}")
     else:
         return render_template("auth.html", username=session["username"])
 
